@@ -20,9 +20,15 @@ PRODUCT_PACKAGES += \
     SystemUIResUnicorn \
     WifiResUnicorn
 
+DEVICE_PACKAGE_OVERLAYS += \
+    $(LOCAL_PATH)/overlay-evo
+    
 # Sensors
 PRODUCT_PACKAGES += \
     sensors.xiaomi
+
+PRODUCT_PACKAGES += \
+    Updater
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf

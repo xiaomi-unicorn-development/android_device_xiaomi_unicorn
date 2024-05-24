@@ -10,6 +10,7 @@ include device/xiaomi/sm8450-common/BoardConfigCommon.mk
 # Inherit from the proprietary version
 include vendor/xiaomi/unicorn/BoardConfigVendor.mk
 
+
 DEVICE_PATH := device/xiaomi/unicorn
 
 # Kernel

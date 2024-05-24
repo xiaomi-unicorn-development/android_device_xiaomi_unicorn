@@ -18,3 +18,9 @@ PRODUCT_BRAND := Xiaomi
 PRODUCT_MODEL := 2206122SC
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
+
+BUILD_FINGERPRINT := Xiaomi/unicorn/unicorn:12/SKQ1.230401.001/V816.0.4.0.ULECNXM:user/release-keys
+
+# Miui Camera for unicorn
+$(call inherit-product, device/xiaomi/miuicamera-unicorn/device.mk)
+$(call inherit-product, device/xiaomi/miuicamera-unicorn/BoardConfig.mk)

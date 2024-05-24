@@ -6,6 +6,54 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+set -e
+
+DEVICE=unicorn-dbf
+VENDOR=xiaomi
+
+# Load extract_utils and do some sanity checks
+MY_DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
+
+ANDROID_ROOT="${MY_DIR}/../../.."
+
+HELPER="${ANDROID_ROOT}/tools/extract-utils/extract_utils.sh"
+if [ ! -f "${HELPER}" ]; then
+    echo "Unable to find helper script at ${HELPER}"
+    exit 1
+fi
+source "${HELPER}"
+
+# Default to sanitizing the vendor folder before extraction
+CLEAN_VENDOR=true
+
+KANG=
+SECTION=
+
+while [ "${#}" -gt 0 ]; do
+    case "${1}" in
+    -n | --no-cleanup)
+        CLEAN_VENDOR=false
+        ;;
+    -k | --kang)
+        KANG="--kang"
+        ;;
+    -s | --section)
+        SECTION="${2}"
+        shift
+        CLEAN_VENDOR=false
+        ;;
+    *)
+        SRC="${1}"
+        ;;
+    esac
+    shift
+done
+
+if [ -z "${SRC}" ]; then
+    SRC="adb"
+fi
+
 function blob_fixup() {
     case "${1}" in
         vendor/etc/camera/pureView_parameter.xml)
@@ -20,19 +68,17 @@ function blob_fixup() {
         vendor/lib/hw/vendor.xiaomi.sensor.citsensorservice@2.0-impl.so|vendor/lib64/hw/vendor.xiaomi.sensor.citsensorservice@2.0-impl.so)
             sed -i 's/_ZN13DisplayConfig10ClientImpl13ClientImplGetENSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEPNS_14ConfigCallbackE/_ZN13DisplayConfig10ClientImpl4InitENSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEPNS_14ConfigCallbackE\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0/g' "${2}"
             ;;
+        vendor/etc/vintf/manifest/c2_manifest_vendor.xml)
+            sed -ni '/dolby/!p' "${2}"
+            ;;
+        vendor/bin/hw/dolbycodec2 | vendor/bin/hw/vendor.dolby.hardware.dms@2.0-service | vendor/lib64/hw/audio.primary.taro.so)
+            "${PATCHELF}" --add-needed "libstagefright_foundation-v33.so" "${2}"
     esac
 }
 
-# If we're being sourced by the common script that we called,
-# stop right here. No need to go down the rabbit hole.
-if [ "${BASH_SOURCE[0]}" != "${0}" ]; then
-    return
-fi
+# Initialize the helper
+setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" false "${CLEAN_VENDOR}"
 
-set -e
+extract "${MY_DIR}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
 
-export DEVICE=unicorn
-export DEVICE_COMMON=sm8450-common
-export VENDOR=xiaomi
-
-"./../../${VENDOR}/${DEVICE_COMMON}/extract-files.sh" "$@"
+"${MY_DIR}/setup-makefiles.sh"
