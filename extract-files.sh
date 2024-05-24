@@ -8,7 +8,7 @@
 
 set -e
 
-DEVICE=unicorn-dbf
+DEVICE=unicorn
 VENDOR=xiaomi
 
 # Load extract_utils and do some sanity checks
