@@ -1,4 +1,4 @@
-# All unpinned blobs below are extracted from unicorn V816.0.5.0.ULECNXM
+# All unpinned blobs below are extracted from unicorn V816.0.6.0.ULECNXM
 
 # ACDB
 vendor/etc/acdbdata/Tutu/Tutu_acdb_cal.acdb
@@ -1246,17 +1246,6 @@ vendor/etc/sensors/config/sx933x_0.json
 vendor/etc/sensors/config/tcs3408.json
 vendor/etc/sensors/config/tmd3719.json
 vendor/etc/sensors/sns_reg_config
-
-# Sensors - CIT
-vendor/bin/hw/vendor.xiaomi.sensor.citsensorservice@2.0-service
-vendor/etc/init/vendor.xiaomi.sensor.citsensorservice@2.0-service.rc
-vendor/etc/vintf/manifest/vendor.xiaomi.sensor.citsensorservice@2.0-service.xml
-vendor/lib/hw/vendor.xiaomi.sensor.citsensorservice@2.0-impl.so
-vendor/lib/vendor.xiaomi.sensor.citsensorservice@1.1.so
-vendor/lib/vendor.xiaomi.sensor.citsensorservice@2.0.so
-vendor/lib64/hw/vendor.xiaomi.sensor.citsensorservice@2.0-impl.so
-vendor/lib64/vendor.xiaomi.sensor.citsensorservice@1.1.so
-vendor/lib64/vendor.xiaomi.sensor.citsensorservice@2.0.so
 
 # Sensors - SSC calibration
 -vendor/lib/libssccalapi@2.0.so
